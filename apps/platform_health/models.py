@@ -9,7 +9,7 @@ class Note(models.Model):
 
     def __str__(self):
         return f'{self.user.username} | notes'
-    
+        
 
 class Person(models.Model):
     LEVELS = (
@@ -18,12 +18,20 @@ class Person(models.Model):
         ('P', 'Patients')
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    notes = models.ManyToManyField(Note)
-    beats = models.ForeignKey(Beats, on_delete=models.CASCADE)
-    height = models.FloatField()
-    weight = models.FloatField()
     code = models.CharField(max_length=256)
     level = models.CharField(max_length=1, choices=LEVELS, default='P')
 
     def __str__(self):
         return f'{self.user.username} | {self.level}'
+
+
+class PersonData(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    beats = models.ManyToManyField(Beats, blank=True)
+    notes = models.ManyToManyField(Note, blank=True)
+    height = models.FloatField(blank=True, null=True)
+    weight = models.FloatField(blank=True, null=True)
+    phone_number = models.CharField(max_length=19, unique=True)
+
+    def __str__(self):
+        return self.phone_number   
