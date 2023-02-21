@@ -21,4 +21,6 @@ def heart_rate(request):
             person_data.save()
             return HttpResponse('Saved data')
         except:
+            '''500: Server error response code indicates that the server encountered an
+            unexpected condition that prevented it from fulfilling the request.'''
             return HttpResponseServerError('Internal Erro')
