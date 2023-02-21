@@ -1,4 +1,4 @@
 from django.contrib import admin
-from apps.platform_health.models import Beats
+from apps.arduino.models import HeartRateData
 
-admin.site.register(Beats)
+admin.site.register(HeartRateData)
