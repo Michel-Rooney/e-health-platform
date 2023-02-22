@@ -48,9 +48,9 @@ def register(request):
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
-            person = Person(user=user, code=code)
+            person = Person(user=user, code=code, phone_number=phone_number)
             person.save()
-            person_data = PersonData(person=person, phone_number=phone_number)
+            person_data = PersonData(person=person)
             person_data.save()
             messages.success(request, 'Usuário cadastrado com sucesso')
             return redirect('/')

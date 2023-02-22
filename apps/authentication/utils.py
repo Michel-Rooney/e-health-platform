@@ -1,4 +1,4 @@
-from apps.platform_health.models import PersonData
+from apps.platform_health.models import Person
 from django.contrib.auth.models import User
 from django.contrib import messages
 import re
@@ -43,7 +43,7 @@ def email_is_valid(request, email: str) -> bool:
     return True
     
 def phone_is_valid(request, phone_number: str) -> bool:
-    phone_number_exist = PersonData.objects.filter(phone_number=phone_number).exists()
+    phone_number_exist = Person.objects.filter(phone_number=phone_number).exists()
     phone_number_pattern = r'^\+55\s*\(?(\d{2})\)?[-.\s]*(\d{5})[-.\s]*(\d{4})$' # +55 (XX) XXXXX-XXXX
     phone_number_match = re.match(phone_number_pattern, phone_number)
 
