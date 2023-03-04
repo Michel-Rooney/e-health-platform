@@ -29,7 +29,7 @@ def register_is_valid(request, username: str, email: str, phone_number: str, pas
 
 def email_is_valid(request, email: str) -> bool:
     email_exist = User.objects.filter(email=email).exists()
-    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' # example@email.com
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'  # example@email.com
     email_match = re.match(email_pattern, email)
 
     if email_exist:
@@ -44,7 +44,7 @@ def email_is_valid(request, email: str) -> bool:
     
 def phone_is_valid(request, phone_number: str) -> bool:
     phone_number_exist = Person.objects.filter(phone_number=phone_number).exists()
-    phone_number_pattern = r'^\+55\s*\(?(\d{2})\)?[-.\s]*(\d{5})[-.\s]*(\d{4})$' # +55 (XX) XXXXX-XXXX
+    phone_number_pattern = r'^\+55\s*\(?(\d{2})\)?[-.\s]*(\d{5})[-.\s]*(\d{4})$'  # +55 (XX) XXXXX-XXXX
     phone_number_match = re.match(phone_number_pattern, phone_number)
 
     if phone_number_exist:
@@ -58,20 +58,11 @@ def phone_is_valid(request, phone_number: str) -> bool:
     return True
 
 def password_is_valid(request, password: str, confirm_password: str) -> bool:
-    if len(password) < 6:
-        messages.error(request, 'Sua senha dever ter 6 ou mais caracteres')
-        return False
-    
-    if not re.search('[A-Z]', password):
-        messages.error(request, 'Sua senha não contem letras maiúsculas')
-        return False
-    
-    if not re.search('[a-z]', password):
-        messages.error(request, 'Sua senha não contem letras minúsculas')
-        return False
-    
-    if not re.search('[0-9]', password):
-        messages.error(request, 'Sua senha não contem números')
+    password_pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$'  # Ex4mp!
+    password_match = re.match(password_pattern, password)
+
+    if not password_match:
+        messages.error(request, 'Senha não é válida')
         return False
     
     if password != confirm_password:
