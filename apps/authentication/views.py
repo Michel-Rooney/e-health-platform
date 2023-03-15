@@ -24,12 +24,12 @@ def login(request):
         
         auth.login(request, user)
         messages.success(request, 'Usuário logado com sucesso')
-        return HttpResponse(f'{username}, {password}')
+        return redirect('/')
     
 def logout(request):
     auth.logout(request)
     messages.success(request, 'Usuário saiu')
-    return HttpResponse('saiu')
+    return redirect('/')
 
 def register(request):
     if request.method == 'GET':
@@ -40,9 +40,10 @@ def register(request):
         phone_number = request.POST.get('phone-number')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
+        checkbox = request.POST.get('checkbox')
         code = sha256(f'{username}{email}'.encode()).hexdigest()
 
-        if not register_is_valid(request, username, email, phone_number, password, confirm_password):
+        if not register_is_valid(request, username, email, phone_number, password, confirm_password, checkbox):
             return redirect('/auth/register')
 
         try:
