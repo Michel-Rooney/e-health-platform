@@ -1,0 +1,59 @@
+<div class="modal" id="personDataModal" aria-labelledby="personDataModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Update Information</h4>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <form action="{% url 'update_information' person.id %}" method="post">{% csrf_token %}
+        <div class="modal-body">
+          <div class="d-flex flex-row align-items-center mb-3">
+            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+            <div class="form-outline flex-fill mb-0">
+              <input type="text" id="form3Example1c" class="form-control" name="username" value="{{person.user.username}}"/>
+              <label class="form-label" for="form3Example1c">Your Name</label>
+            </div>
+          </div>
+          <div class="d-flex flex-row align-items-center mb-3">
+            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+            <div class="form-outline flex-fill mb-0">
+              <input type="email" id="form3Example3c" class="form-control" name="email" value="{{person.user.email}}"/>
+              <label class="form-label" for="form3Example3c">Your Email</label>
+            </div>
+          </div>
+          <div class="d-flex flex-row align-items-center mb-3">
+            <i class="fas fa-phone fa-lg me-3 fa-fw"></i>
+            <div class="form-outline flex-fill mb-0">
+              <input type="text" id="form3Example5c" class="form-control" name="phone-number" value="{{person.phone_number}}"/>
+              <label class="form-label" for="form3Example5c">Your Phone</label>
+            </div>
+          </div>
+          <div class="d-flex flex-row align-items-center mb-3">
+            <i class="fas fa-location-dot fa-lg me-3 fa-fw"></i>
+            <div class="form-outline flex-fill mb-0">
+              <input type="text" id="form3Example5c" class="form-control" name="adress" value="{{person.address}}"/>
+              <label class="form-label" for="form3Example5c">Adress</label>
+            </div>
+          </div>
+          <div class="d-flex flex-row align-items-center mb-3">
+            <i class="fas fa-ruler-vertical fa-lg me-3 fa-fw"></i>
+            <div class="form-outline flex-fill mb-0">
+              <input type="number" id="form3Example5c" class="form-control" name="height" value="{{data.height}}"/>
+              <label class="form-label" for="form3Example5c">Height</label>
+            </div>
+          </div>
+          <div class="d-flex flex-row align-items-center mb-3">
+            <i class="fas fa-weight fa-lg me-3 fa-fw"></i>
+            <div class="form-outline flex-fill mb-0">
+              <input type="number" id="form3Example5c" class="form-control" name="weight" value="{{data.weight}}"/>
+              <label class="form-label" for="form3Example5c">weight</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>  
+      </form>
+    </div>
+  </div>
+</div>

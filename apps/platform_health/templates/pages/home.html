@@ -16,14 +16,41 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
 		<!-- Core theme CSS (includes Bootstrap)-->
 		<link href="{% static 'platform_health/css/styles.css' %}" rel="stylesheet" />
+
+
+		<style type="text/css">
+			.mensagem {
+				background-color: #f2f2f2;
+				color: #333;
+				padding: 10px;
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				display: none; /* mensagem começa oculta */
+				 /* animação de slide out */
+			}
+	
+			@keyframes slide-out {
+				from {right: 20px;} /* posição inicial */
+				to {right: -300px;} /* posição final */
+			}
+		</style>
+		<script>
+			function exibirMensagem() {
+				var mensagem = document.querySelector('.mensagem');
+				mensagem.style.display = 'block'; // exibe mensagem
+				setTimeout(function() {
+					mensagem.style.display = 'none'; // inicia animação de slide out
+				}, 5000);
+			}
+		</script>
 	</head>
 	<body id="page-top">
 		<!-- Navigation-->
 		<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
 			<div class="container">
 				<a class="navbar-brand" href="#page-top">E-HEALTH MONITOR</a>
-				<button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-					Menu
+				<button class="navbar-toggler text-uppercase font-weight-bold text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 					<i class="fas fa-bars"></i>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarResponsive">
@@ -68,7 +95,7 @@
 		</header>
 		<!-- Portfolio Section-->
 		<section class="page-section portfolio" id="portfolio">
-			< class="container">
+			<class="container">
 				<!-- Portfolio Section Heading-->
 				<h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Portfólio</h2>
 				<!-- Icon Divider-->

@@ -3,15 +3,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class Note(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    note = models.TextField()
-    date = models.DateTimeField()
-
-    def __str__(self) -> str:
-        return f'{self.user.username} | notes'
-        
-
 class Person(models.Model):
     LEVELS = (
         ('A', 'Admin'),
@@ -27,6 +18,15 @@ class Person(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user.username} | {self.level}'
+    
+
+class Note(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.SET_NULL, null=True)
+    note = models.TextField()
+    date = models.DateTimeField()
+
+    def __str__(self) -> str:
+        return f'{self.person.user.username} | notes'
 
 
 class PersonData(models.Model):

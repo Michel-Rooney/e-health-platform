@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mensagem de Canto</title>
+  <style type="text/css">
+    .mensagem {
+      background-color: #f2f2f2;
+      color: #333;
+      padding: 10px;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: none; /* mensagem começa oculta */
+       /* animação de slide out */
+    }
+
+    @keyframes slide-out {
+      from {right: 20px;} /* posição inicial */
+      to {right: -300px;} /* posição final */
+    }
+  </style>
+  <script>
+    function exibirMensagem() {
+      var mensagem = document.querySelector('.mensagem');
+      mensagem.style.display = 'block'; // exibe mensagem
+      setTimeout(function() {
+        mensagem.style.display = 'none'; // inicia animação de slide out
+      }, 5000);
+    }
+  </script>
+</head>
+<body>
+  <button onclick="exibirMensagem()">Exibir mensagem</button>
+  <div class="mensagem">
+    <p>Olá, esta é uma mensagem de canto!</p>
+  </div>
+</body>
+</html>

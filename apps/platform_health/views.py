@@ -5,8 +5,10 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 from .utils import contact_is_valid
 from utils.utils import send_email
 from django.contrib.auth.decorators import login_required
-from .models import Doctor, Person
+from .models import Doctor, Person, Note
 from django.contrib import messages
+from datetime import datetime
+from django.contrib.auth.models import User
 
 # def home(request):
 #     try:
@@ -62,3 +64,49 @@ def patient(request, id):
     person_data = PersonData.objects.filter(person=person).first()
     beats = PersonData.objects.get(person=person).beats.all().aggregate(media=Avg('beat'))
     return render(request, 'pages/patient.html', {'person':person, 'data':person_data, 'doctor':doctor, 'beats':beats['media']})
+
+@login_required(login_url='/auth/login')
+def del_note(request, id):
+    note = Note.objects.filter(id=id).first()
+    note.delete()
+    messages.success(request, 'Nota deletada com sucesso')
+    person = PersonData.objects.filter(notes=note.id).first()
+    return redirect(f'/patient/{note.person.id}/')
+
+@login_required(login_url='/auth/login')
+def create_note(request, id):
+    note = request.POST.get('note')
+
+    notes = Note(person_id=id, note=note, date=datetime.now())
+    notes.save()
+    person = PersonData.objects.filter(person_id=id).first()
+    person.notes.add(notes.id)
+    return redirect(f'/patient/{notes.person.id}/')
+
+@login_required(login_url='/auth/login')
+def update_information(request, id):
+    username = request.POST.get('username')
+    email = request.POST.get('email')
+    phone_number = request.POST.get('phone-number')
+    adress = request.POST.get('adress')
+    height = request.POST.get('height')
+    weight = request.POST.get('weight')
+
+    
+    person = Person.objects.filter(id=id).first()    
+    person.phone_number = phone_number
+    person.address = adress   
+    person.save()
+
+    user = User.objects.filter(id=person.user.id).first()
+    user.username = username
+    user.email = email
+    user.save()
+    
+    person_data = PersonData.objects.filter(person_id=id).first()
+    person_data.height = height
+    person_data.weight = weight
+    person_data.save()
+    
+    messages.success(request, 'Informações atualizadas com sucesso')
+    return redirect(f'/patient/{person.id}/')

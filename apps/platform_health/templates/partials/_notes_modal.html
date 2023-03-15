@@ -1,0 +1,18 @@
+<div class="modal" id="noteModal" aria-labelledby="noteModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Create Note</h4>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <form action="{% url 'create_note' person.id %}" method="post">{% csrf_token %}
+        <div class="modal-body">
+          <textarea name="note" cols="55" rows="10" style="border: none;"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>  
+      </form>
+    </div>
+  </div>
+</div>
