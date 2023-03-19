@@ -24,7 +24,7 @@ def login(request):
         
         auth.login(request, user)
         messages.success(request, 'Usuário logado com sucesso')
-        return redirect('/')
+        return redirect(f'/patient/{user.id}/')
     
 def logout(request):
     auth.logout(request)

@@ -9,6 +9,11 @@ from .models import Doctor, Person, Note
 from django.contrib import messages
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+
 
 # def home(request):
 #     try:
@@ -63,14 +68,27 @@ def patient(request, id):
         doctor = False
     person_data = PersonData.objects.filter(person=person).first()
     beats = PersonData.objects.get(person=person).beats.all().aggregate(media=Avg('beat'))
-    return render(request, 'pages/patient.html', {'person':person, 'data':person_data, 'doctor':doctor, 'beats':beats['media']})
+
+    return render(request, 'pages/patient.html', {
+        'person':person, 'data':person_data, 
+        'doctor':doctor, 'beats':beats['media']
+    })
+
+@login_required(login_url='/auth/login')
+@csrf_exempt
+def patient_chart(request, id):
+    person = PersonData.objects.filter(id=id).first()
+    beats = [beat.beat for beat in person.beats.all().order_by('-id')]
+    labels = list(range(len(beats[9::-1])))
+    data = {'beats':beats[9::-1], 'labels':labels}
+    return JsonResponse(data)
+    
 
 @login_required(login_url='/auth/login')
 def del_note(request, id):
     note = Note.objects.filter(id=id).first()
     note.delete()
     messages.success(request, 'Nota deletada com sucesso')
-    person = PersonData.objects.filter(notes=note.id).first()
     return redirect(f'/patient/{note.person.id}/')
 
 @login_required(login_url='/auth/login')
@@ -89,8 +107,8 @@ def update_information(request, id):
     email = request.POST.get('email')
     phone_number = request.POST.get('phone-number')
     adress = request.POST.get('adress')
-    height = request.POST.get('height')
-    weight = request.POST.get('weight')
+    height = float(request.POST.get('height'))
+    weight = float(request.POST.get('weight'))
 
     
     person = Person.objects.filter(id=id).first()    

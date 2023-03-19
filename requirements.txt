@@ -1,7 +1,10 @@
+antiorm==1.2.1
 asgiref==3.6.0
 autopep8==2.0.2
 certifi==2022.12.7
 charset-normalizer==3.0.1
+db==0.1.1
+db-sqlite3==0.0.1
 Django==4.1.7
 idna==3.4
 Pillow==9.4.0

@@ -1,0 +1,10 @@
+.message-alert {
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  max-height: 5em;
+  min-width: 15em;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
