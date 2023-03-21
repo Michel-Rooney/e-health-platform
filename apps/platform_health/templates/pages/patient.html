@@ -16,6 +16,8 @@
         <ul class="navbar-nav ms-auto">
           {% if doctor %}
             <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'patients' %}">Pacientes</a></li>
+          {% elif person.level == 'A' %}
+            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'management' %}">Gerenciamento</a></li>
           {% endif %}
           <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'logout' %}">Sair</a></li>
         </ul>
@@ -34,10 +36,11 @@
               <p class="text-muted mb-1">{{person.get_level_display}}</p>
               <p class="text-muted mb-4">{{person.address}}</p>
               <div class="d-flex justify-content-center mb-2">
-                {% if doctor %}
+                {% if request.user.id ==  person.user.id %}
+                  <button type="button" class="btn btn-primary ms-1" data-toggle="modal" data-target="#personDataModal">Update Information</button>
+                {% elif doctor %}
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#noteModal">Create Note</button>
                 {% endif %}
-                <button type="button" class="btn btn-primary ms-1" data-toggle="modal" data-target="#personDataModal">Update Information</button>
               </div>
             </div>
           </div>

@@ -103,6 +103,7 @@ def create_note(request, id):
 
 @login_required(login_url='/auth/login')
 def update_information(request, id):
+    profile_picture = request.FILES.get('profile-picture')
     username = request.POST.get('username')
     email = request.POST.get('email')
     phone_number = request.POST.get('phone-number')
@@ -110,10 +111,13 @@ def update_information(request, id):
     height = float(request.POST.get('height'))
     weight = float(request.POST.get('weight'))
 
-    
     person = Person.objects.filter(id=id).first()    
     person.phone_number = phone_number
-    person.address = adress   
+    person.address = adress
+
+    if not person.profile_picture.url == '/media/profile_default.png':
+        person.profile_picture.delete()
+    person.profile_picture = profile_picture
     person.save()
 
     user = User.objects.filter(id=person.user.id).first()
@@ -128,3 +132,65 @@ def update_information(request, id):
     
     messages.success(request, 'Informações atualizadas com sucesso')
     return redirect(f'/patient/{person.id}/')
+
+@login_required(login_url='/auth/login')
+def management(request):
+    if request.method == 'GET':
+        doctor = request.GET.get('select-doctor')
+        if doctor:
+            patients = Doctor.objects.get(id=doctor).patients
+        patients = None
+
+    person = Person.objects.get(user_id=request.user.id)
+    if not person.level == 'A':
+        messages.error(request, 'Apenas adiministradores podem acessar essa página')
+        return redirect(f'/patient/{person.id}')
+    
+    people = Person.objects.filter(level='P')
+    doctors = Person.objects.filter(level='D')
+    return render(request, 'pages/management.html', {
+        'person': person, 'people':people, 'doctors': doctors,
+        'patients': patients,
+    })
+
+def management_doctors_add(request):
+    if request.method == 'POST':
+        people = request.POST.getlist('select-doctor')
+
+        try:
+            for id in people:
+                person = Person.objects.filter(id=id).first()
+                person.level = 'D'
+                person.save()
+                doctor = Doctor(person=person)
+                doctor.save()
+            messages.success(request, 'Tarefa realizada com sucesso')
+            return redirect('/management')
+        except:
+            messages.error(request, 'Erro interno do sistema')
+            return redirect('/management')
+
+def management_doctors_remove(request):
+    if request.method == 'POST':
+        people = request.POST.getlist('select-person')
+
+        try:
+            for id in people:
+                person = Person.objects.filter(id=id).first()
+                person.level = 'P'
+                person.save()
+                doctor = Doctor.objects.filter(person=person).first()
+                doctor.delete()
+            messages.success(request, 'Tarefa realizada com sucesso')
+            return redirect('/management')
+        except:
+            messages.error(request, 'Erro interno do sistema')
+            return redirect('/management')
+
+def management_patients_add(request):
+    ...
+
+def management_patients_remove(request):
+    if request.method == 'GET':
+        doctor = request.GET.get('select-doctor')
+        patients = request.GET.getlist('select-patient')

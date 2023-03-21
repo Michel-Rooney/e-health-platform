@@ -54,7 +54,7 @@ def register(request):
             person_data = PersonData(person=person)
             person_data.save()
             messages.success(request, 'Usuário cadastrado com sucesso')
-            return redirect('/')
+            return redirect('/auth/login')
         except:
-            messages.error('Erro interno do sistema')
+            messages.error(request, 'Erro interno do sistema')
             return redirect('/auth/register')

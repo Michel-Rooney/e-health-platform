@@ -9,26 +9,21 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'patient' user.id %}">Perfil</a></li>
+          <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'patient' person.id %}">Perfil</a></li>
           <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{% url 'logout' %}">Sair</a></li>
         </ul>
       </div>
     </div>
   </nav>
   <div class="container mx-auto masthead">
-    <div class="row">
-      {% for patient in patients %}  
-      <div class="col-md-4">
-        <div class="card" style="width: 18rem;">
-          <img src="{{patient.person.profile_picture.url}}" class="card-img-top" alt="Avatar {{patient.person.user.username}}">
-          <div class="card-body">
-            <h5 class="card-title">{{patient.person.user.username}}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{patient.person.phone_number}}</h6>
-            <a href="{% url 'patient' patient.person.id %}" class="btn btn-primary btn-lg d-flex justify-content-center mt-4">Informações</a>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
+    <div class="row" style="justify-content: space-between;">
+        {% include 'partials/_management_doctors_model.html' %}
+        {% include 'partials/_management_patients_model.html' %}
     </div>
   </div>
+  {% if messages %}
+    {% for message in messages %}
+      <p class="alert {{message.tags}} message-alert" id="message-alert-id">{{message}}</p>
+    {% endfor %}
+  {% endif %}
 {% endblock %}

@@ -14,7 +14,7 @@ class Person(models.Model):
     level = models.CharField(max_length=1, choices=LEVELS, default='P')
     phone_number = models.CharField(max_length=19, unique=True)
     address = models.CharField(max_length=255)
-    profile_picture = models.ImageField(upload_to='profile_picture') 
+    profile_picture = models.ImageField(upload_to='profile_picture', default=r'profile_default.png') 
 
     def __str__(self) -> str:
         return f'{self.user.username} | {self.level}'
@@ -23,7 +23,7 @@ class Person(models.Model):
 class Note(models.Model):
     person = models.ForeignKey(Person, on_delete=models.SET_NULL, null=True)
     note = models.TextField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f'{self.person.user.username} | notes'
@@ -36,7 +36,7 @@ class PersonData(models.Model):
     notes = models.ManyToManyField(Note, blank=True)
     height = models.FloatField(blank=True, null=True)
     weight = models.FloatField(blank=True, null=True)
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.person.user.username

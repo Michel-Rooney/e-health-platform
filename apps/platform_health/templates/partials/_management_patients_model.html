@@ -1,0 +1,34 @@
+<div class="container" id="managementPatients" aria-labelledby="managementPatients">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Gerenciar Pacientes</h4>
+        <button type="button" class="btn-close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'management' %}" method="get">{% csrf_token %}
+          <label class="form-label" for="select-doctor">Selecione o Médico: </label>
+          <select name="select-doctor" id="select-doctor" class="form-select">
+            {% for doctor in doctors %}
+              <option value="{{doctor.id}}">{{doctor}}</option>
+            {% endfor %}
+          </select>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+          </div>
+        </form>
+
+        <form action="{% url 'management_doctors_remove' %}" method="post">{% csrf_token %}
+          <label class="form-label" for="select-doctor">Selecione os seus Pacientes: </label>
+          <select name="select-patient" id="select-doctor" class="form-select" multiple>
+            {% for patient in patients %}
+              <option value="{{patient.id}}">{{patient}}</option>
+            {% endfor %}
+          </select>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Torna-lo Paciente desse Médico</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
