@@ -133,26 +133,6 @@ def update_information(request, id):
     messages.success(request, 'Informações atualizadas com sucesso')
     return redirect(f'/patient/{person.id}/')
 
-# @login_required(login_url='/auth/login')
-# def management(request):
-#     if request.method == 'GET':
-#         doctor = request.GET.get('select-doctor')
-#         if doctor:
-#             patients = Doctor.objects.get(id=doctor).patients
-#         patients = None
-
-#     person = Person.objects.get(user_id=request.user.id)
-#     if not person.level == 'A':
-#         messages.error(request, 'Apenas adiministradores podem acessar essa página')
-#         return redirect(f'/patient/{person.id}')
-    
-#     people = Person.objects.filter(level='P')
-#     doctors = Person.objects.filter(level='D')
-#     return render(request, 'pages/management.html', {
-#         'person': person, 'people':people, 'doctors': doctors,
-#         'patients': patients,
-#     })
-
 @login_required(login_url='/auth/login')
 def management_doctors(request):
     person = Person.objects.filter(user_id=request.user.id).first()
@@ -162,6 +142,7 @@ def management_doctors(request):
         'person': person, 'people': people, 'doctors': doctors
     })
 
+@login_required(login_url='/auth/login')
 def management_doctors_add(request):
     if request.method == 'POST':
         people = request.POST.getlist('select-doctor')
@@ -179,6 +160,7 @@ def management_doctors_add(request):
             messages.error(request, 'Erro interno do sistema')
             return redirect('/management/doctors')
 
+@login_required(login_url='/auth/login')
 def management_doctors_remove(request):
     if request.method == 'POST':
         people = request.POST.getlist('select-person')
@@ -218,6 +200,7 @@ def management_patients(request):
         'id_doctor': int(doctor), 'patients': patients
     })
 
+@login_required(login_url='/auth/login')
 def management_patients_add(request, id):
     if request.method == 'POST':
         patients = request.POST.getlist('select-person')
@@ -237,6 +220,7 @@ def management_patients_add(request, id):
             messages.error(request, 'Erro interno do sistema')
             return redirect('/management/patients')
 
+@login_required(login_url='/auth/login')
 def management_patients_remove(request, id):
     if request.method == 'POST':
         patients = request.POST.getlist('select-patient')
@@ -256,28 +240,7 @@ def management_patients_remove(request, id):
             return redirect('/management/patients')
 
 
-
-
-
-
-
-
-
-
-
-
-
-# @login_required(login_url='/auth/login')
-# def management_patients(request):
-#     doctor = request.GET.get('select-doctor')
-#     print(doctor)
-#     if not doctor:
-#         patients = Doctor.objects.all().first().patients.all()
-#     else:
-#         patients = Doctor.objects.filter(person_id=doctor).first().patients.all()
-
-#     person = Person.objects.filter(user_id=request.user.id).first()
-#     doctors = Person.objects.filter(level='D')
-#     return render(request, 'pages/management_patients.html', {
-#         'person': person, 'patients':patients, 'doctors': doctors, 'id_doctor': int(doctor)
-#     })
+@xframe_options_sameorigin
+def page2(request):
+    person_data = PersonData.objects.get(id=2).beats.all().aggregate(media=Sum('beat'))
+    return render(request, 'page2.html', {'data':person_data['media']})

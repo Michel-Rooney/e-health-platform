@@ -7,8 +7,7 @@ conn = sqlite3.connect('db.sqlite3')
 cursor = conn.cursor()
 
 # Executar uma consulta
-cursor.execute("DELETE FROM platform_health_persondata_notes")
-cursor.execute("DELETE FROM platform_health_persondata_notes")
+cursor.execute("DELETE FROM arduino_heartratedata")
 conn.commit()
 
 

@@ -17,5 +17,5 @@ urlpatterns = [
     path('management/patients/add/<str:id>/', views.management_patients_add, name='management_patients_add'),
     path('management/patients/remove/<str:id>/', views.management_patients_remove, name='management_patients_remove'),
     # path('page1/', views.page1, name='page1'),
-    # path('page2/', views.page2, name='page2'), 
+    path('page2/', views.page2, name='page2'), 
 ]
