@@ -133,24 +133,33 @@ def update_information(request, id):
     messages.success(request, 'Informações atualizadas com sucesso')
     return redirect(f'/patient/{person.id}/')
 
-@login_required(login_url='/auth/login')
-def management(request):
-    if request.method == 'GET':
-        doctor = request.GET.get('select-doctor')
-        if doctor:
-            patients = Doctor.objects.get(id=doctor).patients
-        patients = None
+# @login_required(login_url='/auth/login')
+# def management(request):
+#     if request.method == 'GET':
+#         doctor = request.GET.get('select-doctor')
+#         if doctor:
+#             patients = Doctor.objects.get(id=doctor).patients
+#         patients = None
 
-    person = Person.objects.get(user_id=request.user.id)
-    if not person.level == 'A':
-        messages.error(request, 'Apenas adiministradores podem acessar essa página')
-        return redirect(f'/patient/{person.id}')
+#     person = Person.objects.get(user_id=request.user.id)
+#     if not person.level == 'A':
+#         messages.error(request, 'Apenas adiministradores podem acessar essa página')
+#         return redirect(f'/patient/{person.id}')
     
+#     people = Person.objects.filter(level='P')
+#     doctors = Person.objects.filter(level='D')
+#     return render(request, 'pages/management.html', {
+#         'person': person, 'people':people, 'doctors': doctors,
+#         'patients': patients,
+#     })
+
+@login_required(login_url='/auth/login')
+def management_doctors(request):
+    person = Person.objects.filter(user_id=request.user.id).first()
     people = Person.objects.filter(level='P')
     doctors = Person.objects.filter(level='D')
-    return render(request, 'pages/management.html', {
-        'person': person, 'people':people, 'doctors': doctors,
-        'patients': patients,
+    return render(request, 'pages/management_doctors.html', {
+        'person': person, 'people': people, 'doctors': doctors
     })
 
 def management_doctors_add(request):
@@ -165,10 +174,10 @@ def management_doctors_add(request):
                 doctor = Doctor(person=person)
                 doctor.save()
             messages.success(request, 'Tarefa realizada com sucesso')
-            return redirect('/management')
+            return redirect('/management/doctors')
         except:
             messages.error(request, 'Erro interno do sistema')
-            return redirect('/management')
+            return redirect('/management/doctors')
 
 def management_doctors_remove(request):
     if request.method == 'POST':
@@ -182,15 +191,93 @@ def management_doctors_remove(request):
                 doctor = Doctor.objects.filter(person=person).first()
                 doctor.delete()
             messages.success(request, 'Tarefa realizada com sucesso')
-            return redirect('/management')
+            return redirect('/management/doctors')
         except:
             messages.error(request, 'Erro interno do sistema')
-            return redirect('/management')
+            return redirect('/management/doctors')
+        
+@login_required(login_url='/auth/login')
+def management_patients(request):
+    doctor = request.GET.get('select-doctor')
+    if not doctor:
+        doctor = Person.objects.first().id
 
-def management_patients_add(request):
-    ...
+    person = Person.objects.filter(user_id=request.user.id).first()
+    if not person.level == 'A':
+        messages.error(request, 'Apenas adiministradores podem acessar essa página')
+        return redirect(f'/patient/{person.id}')
 
-def management_patients_remove(request):
-    if request.method == 'GET':
-        doctor = request.GET.get('select-doctor')
-        patients = request.GET.getlist('select-patient')
+    people = PersonData.objects.filter(person__level='P', doctor=None)
+    doctors = Person.objects.filter(level='D')
+    try:
+        patients = Doctor.objects.filter(person__id=doctor).first().patients.all()
+    except:
+        patients = []
+    return render(request, 'pages/management_patients.html', {
+        'person_id': person, 'people':people, 'doctors': doctors, 
+        'id_doctor': int(doctor), 'patients': patients
+    })
+
+def management_patients_add(request, id):
+    if request.method == 'POST':
+        patients = request.POST.getlist('select-person')
+        doctor = Doctor.objects.filter(person__id=id).first()
+
+
+        try:
+            for patient_id in patients:
+                person = PersonData.objects.filter(id=patient_id).first()
+                person.doctor = doctor
+                person.save()
+                doctor.patients.add(person.id)
+                doctor.save()
+            messages.success(request, 'Pacientes adicionados com sucesso')
+            return redirect(f'/management/patients')
+        except:
+            messages.error(request, 'Erro interno do sistema')
+            return redirect('/management/patients')
+
+def management_patients_remove(request, id):
+    if request.method == 'POST':
+        patients = request.POST.getlist('select-patient')
+        doctor = Doctor.objects.filter(person__id=id).first()
+
+        try:
+            for patient_id in patients:
+                person = PersonData.objects.filter(id=patient_id).first()
+                person.doctor = None
+                person.save()
+                doctor.patients.remove(person.id)
+                doctor.save()
+            messages.success(request, 'Pacientes removido com sucesso')
+            return redirect('/management/patients')
+        except:
+            messages.error(request, 'Erro interno do sistema')
+            return redirect('/management/patients')
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @login_required(login_url='/auth/login')
+# def management_patients(request):
+#     doctor = request.GET.get('select-doctor')
+#     print(doctor)
+#     if not doctor:
+#         patients = Doctor.objects.all().first().patients.all()
+#     else:
+#         patients = Doctor.objects.filter(person_id=doctor).first().patients.all()
+
+#     person = Person.objects.filter(user_id=request.user.id).first()
+#     doctors = Person.objects.filter(level='D')
+#     return render(request, 'pages/management_patients.html', {
+#         'person': person, 'patients':patients, 'doctors': doctors, 'id_doctor': int(doctor)
+#     })

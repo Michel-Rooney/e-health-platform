@@ -1,37 +1,3 @@
-<!-- <div class="modal" id="managementDoctor" aria-labelledby="managementDoctor">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Gerenciar Médicos</h4>
-        <button type="button" class="btn-close" data-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form action="{% url 'management_doctors_add' %}" method="post">{% csrf_token %}
-          <label class="form-label" for="select-doctor">Selecione as Pessoas: </label>
-          <select name="select-doctor" id="select-doctor" class="form-select" multiple>
-            {% for person in people %}
-              <option value="{{person.id}}">{{person}}</option>
-            {% endfor %}
-          </select>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Torna-lo Médico</button>
-          </div>
-        </form>
-        <form action="{% url 'management_doctors_remove' %}" method="post">{% csrf_token %}
-          <label class="form-label" for="select-doctor">Selecione os Médicos: </label>
-          <select name="select-person" id="select-doctor" class="form-select" multiple>
-            {% for doctor in doctors %}
-              <option value="{{doctor.id}}">{{doctor}}</option>
-            {% endfor %}
-          </select>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Torna-lo Pessoa</button>
-          </div>
-        </form>
-    </div>
-  </div>
-</div> -->
-
 <div class="container" id="managementDoctor" aria-labelledby="managementDoctor">
   <div class="modal-dialog">
     <div class="modal-content">

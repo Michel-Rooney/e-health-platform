@@ -6,27 +6,41 @@
         <button type="button" class="btn-close" data-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <form action="{% url 'management' %}" method="get">{% csrf_token %}
+        <form action="{% url 'management_patients' %}" method="get">{% csrf_token %}
           <label class="form-label" for="select-doctor">Selecione o Médico: </label>
           <select name="select-doctor" id="select-doctor" class="form-select">
             {% for doctor in doctors %}
-              <option value="{{doctor.id}}">{{doctor}}</option>
+              {% if doctor.id == id_doctor %}
+                <option selected value="{{doctor.id}}">{{doctor}}</option>
+              {% else %}
+                <option value="{{doctor.id}}">{{doctor}}</option>
+              {% endif %}
             {% endfor %}
           </select>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Filtrar</button>
           </div>
         </form>
-
-        <form action="{% url 'management_doctors_remove' %}" method="post">{% csrf_token %}
-          <label class="form-label" for="select-doctor">Selecione os seus Pacientes: </label>
+        <form action="{% url 'management_patients_add' id_doctor %}" method="post">{% csrf_token %}
+          <label class="form-label" for="select-doctor">Selecione novos Pacientes: </label>
+          <select name="select-person" id="select-doctor" class="form-select" multiple>
+            {% for person in people %}
+              <option value="{{person.id}}">{{person}}</option>
+            {% endfor %}
+          </select>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Adicionar paciente ao Médico</button>
+          </div>
+        </form>
+        <form action="{% url 'management_patients_remove' id_doctor %}" method="post">{% csrf_token %}
+          <label class="form-label" for="select-doctor">Selecione existentes Pacientes: </label>
           <select name="select-patient" id="select-doctor" class="form-select" multiple>
             {% for patient in patients %}
               <option value="{{patient.id}}">{{patient}}</option>
             {% endfor %}
           </select>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Torna-lo Paciente desse Médico</button>
+            <button type="submit" class="btn btn-primary">Remover paciente ao Médico</button>
           </div>
         </form>
     </div>
