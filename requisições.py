@@ -1,9 +1,9 @@
 import requests
 
 
-DOMINIO = 'http://192.168.3.11:8000/'
+DOMINIO = 'http://127.0.0.1:8000/'
 PATH = 'arduino/heart_rate/?'
-CODE = 'code=316fc6ec40511933dc2c232a470144b24a18f22e5d26d5901b4f311b1e4da84b'
+CODE = 'code=76ef51c95ce8579f9db39612b91a7e26b955245dc8936f114ef74ce680e63d78'
 BEAT = '&beat=10'
 
 lista = [1, 1, 2, 3, 5, 2, 1, 1, 1, 1]
